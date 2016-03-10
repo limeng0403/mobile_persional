@@ -1,0 +1,175 @@
+body *{
+	transition: all .3s;
+	-webkit-transition: all .3s;
+	-moz-transition: all .3s;
+	-o-transition: all .3s;
+}
+html,body{
+	width: 100%;
+	overflow: hidden;
+}
+.menu{
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 0;
+	overflow: hidden;
+}
+.menu *{
+	padding: 0;
+	margin: 0;
+}
+.menu li{
+	width: 100%;
+	height: 48px;
+}
+.nav-tabs{
+	border: none;
+}
+.menu li.active{
+	background: #ccc;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover{
+	border: none;
+	background: none;
+	color: #333;
+}
+.nav-tabs>li>a{
+	border: none;
+	background: none;
+	line-height: 2;
+}
+.header{
+	position: relative;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 38px;
+	background: #337ab7;
+	color: #fefefe;
+	padding: 0!important;
+	margin: 0!important;
+}
+.header *{
+	display: inline-block;
+	color: #fefefe;
+	height: 38px;
+	line-height: 38px;
+}
+.container-fluid{
+	position: relative;
+	top: 0;
+	left: 0;
+}
+.banner {
+	width: 100%;
+	height: 100px;
+	position: relative; 
+	overflow: auto; 
+}
+.banner *{
+	padding: 0;
+	margin: 0;
+}
+.banner ul li {
+	float: left;
+	height: 100px;
+	list-style: none; 
+}
+.banner .btn, .banner .dot {
+	-webkit-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+	-moz-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+	-ms-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+	-o-filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+	filter: drop-shadow(0 1px 2px rgba(0,0,0,.3));
+}
+
+.banner .dots {
+	position: absolute;
+	right: 0;
+	bottom: 20px;
+}
+.banner .dots li {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	margin: 0 4px;
+
+	text-indent: -999em;
+
+	border: 2px solid #fff;
+	border-radius: 6px;
+
+	cursor: pointer;
+	opacity: .4;
+
+	-webkit-transition: background .5s, opacity .5s;
+	-moz-transition: background .5s, opacity .5s;
+	transition: background .5s, opacity .5s;
+}
+.banner .dots li.active {
+	background: #fff;
+	opacity: 1;
+}
+.swiper-container {
+    width: 100%;
+    height: 100px;
+}
+.man-info th,.man-info td{
+	font-size: 12px;
+}
+.message-content span{
+	margin: 10px 2px;
+}
+#messages .form-inline{
+	position: fixed;
+	left:0;
+	bottom:0;
+	margin:0;
+	padding:0;
+}
+#messages .form-group{
+	margin:0;
+	padding:0;
+}
+.face-wrapper{
+	height: 100px;
+	background: url(../img/my_bg.jpg) no-repeat 50% 50%;
+}
+.face{
+	width: 64px;
+	height: 64px;
+	border-radius: 32px;
+	box-shadow: 0 0 8px #ccc;
+	margin-top: 48px;
+}
+.settings{
+	padding: 0 5px;
+}
+.padding0{
+	padding: 0;
+}
+.padding015{
+	padding: 0 15px;
+}
+.h50{
+	height: 50px;
+}
+.h150{
+	height: 150px;
+}
+.h100{
+	height: 100px;
+}
+.bgeee{
+	background: #eee;
+}
+.bgddd{
+	background: #ddd;
+}
+.bgccc{
+	background: #ccc;
+}
+.bgbbb{
+	background: #bbb;
+}
