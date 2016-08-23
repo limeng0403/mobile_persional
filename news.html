@@ -70,7 +70,7 @@
             ready: function() {
                 $.ajax({
                     type: 'GET',
-                    url: 'http://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
+                    url: 'https://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
                     headers: {
                         apikey: 'b9879e5e82c630b8de50e26b1759db30'
                     },
@@ -101,7 +101,7 @@
 
                     $.ajax({
                         type: 'GET',
-                        url: 'http://apis.baidu.com/showapi_open_bus/channel_news/search_news',
+                        url: 'https://apis.baidu.com/showapi_open_bus/channel_news/search_news',
                         data: $.param({
                             channelId: categoryId,
                             title: v.searchKey,
