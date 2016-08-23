@@ -1,0 +1,118 @@
+<html>
+
+<head>
+    <meta name="generator" content="HTML Tidy for HTML5 (experimental) for Windows https://github.com/w3c/tidy-html5/tree/c63cc39" />
+    <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-Control" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta http-equiv="x-dns-prefetch-control" content="off" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="renderer" content="webkit" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
+    <link href="css/amazeui.min.css" rel="stylesheet" />
+    <title>新闻API</title>
+</head>
+
+<body>
+    <header class="am-topbar am-topbar-inverse">
+        <h1 class="am-topbar-brand">
+            <a href="#">新闻</a>
+        </h1>
+    </header>
+    <article class="am-g">
+        <section class="am-u-sm-12 am-form">
+            <section class="am-form-group">
+                <select class="am-form-field" v-model="categoryId">
+                    <option value="0">-- 请选择新闻分类 --</option>
+                    <option v-for="item in categoryList" value="{{item.channelId}}" v-text="item.name"></option>
+                </select>
+            </section>
+            <section class="am-form-group">
+                <input type="text" class="am-form-field" v-model="searchKey" placeholder="请输入关键字">
+            </section>
+            <input type="button" class="am-btn am-btn-default" value="查询" @click="searchEvent()">
+        </section>
+    </article>
+    <article>
+        <section>
+            <ul class="am-list am-list-static am-list-border am-list-striped">
+                <li v-for="item in newsList">
+                    <a href="javascript:;" v-text="item.title"></a>
+                    <span class="am-block am-text-right am-text-sm" v-text="item.pubDate"></span>
+                </li>
+            </ul>
+        </section>
+    </article>
+    <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
+    <script src="js/amazeui.min.js"></script>
+    <script>
+        var v = new Vue({
+            el: 'body',
+            data: {
+                categoryList: [],
+                newsList: [],
+                categoryId: '0',
+                searchKey: ''
+            },
+            ready: function() {
+                $.ajax({
+                    type: 'GET',
+                    url: 'http://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
+                    headers: {
+                        apikey: 'b9879e5e82c630b8de50e26b1759db30'
+                    },
+                    success: function(data) {
+                        try {
+                            var json = data;
+
+                            if (json.showapi_res_error != '') {
+                                return false;
+                            }
+
+                            v.categoryList = json.showapi_res_body.channelList;
+                        } catch (e) {
+
+                        }
+                    }
+                });
+            },
+            methods: {
+                searchEvent: function() {
+                    $(event.target).blur();
+
+                    $.ajax({
+                        type: 'GET',
+                        url: 'http://apis.baidu.com/showapi_open_bus/channel_news/search_news',
+                        data: $.param({
+                            channelId: v.categoryId,
+                            title: v.searchKey,
+                            page: 1,
+                            needContent: 0,
+                            needHtml: 0
+                        }),
+                        headers: {
+                            apikey: 'b9879e5e82c630b8de50e26b1759db30'
+                        },
+                        success: function(data) {
+                            try {
+                                var json = data;
+
+                                if (json.showapi_res_error != '') {
+                                    return false;
+                                }
+
+                                v.newsList = json.showapi_res_body.pagebean.contentlist;
+                            } catch (e) {
+
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
