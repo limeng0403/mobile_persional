@@ -15,35 +15,46 @@
 </head>
 
 <body>
-    <header class="am-topbar am-topbar-inverse">
-        <h1 class="am-topbar-brand">
-            <a href="#">新闻</a>
-        </h1>
+    <header>
+        <ul class="am-nav am-nav-pills">
+            <li class="am-dropdown" data-am-dropdown>
+                <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
+                    新闻分类<span class="am-icon-caret-down"></span>
+                </a>
+                <ul class="am-dropdown-content">
+                    <li v-for="item in categoryList">
+                        <a href="javascript:;" data-categoryId="{{item.channelId}}" @click="searchEvent()" v-text="item.name"></a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
     </header>
-    <article class="am-g">
-        <section class="am-u-sm-12 am-form">
-            <section class="am-form-group">
-                <select class="am-form-field" v-model="categoryId">
-                    <option value="0">-- 请选择新闻分类 --</option>
-                    <option v-for="item in categoryList" value="{{item.channelId}}" v-text="item.name"></option>
-                </select>
-            </section>
-            <section class="am-form-group">
-                <input type="text" class="am-form-field" v-model="searchKey" placeholder="请输入关键字">
-            </section>
-            <input type="button" class="am-btn am-btn-default" value="查询" @click="searchEvent()">
-        </section>
-    </article>
     <article>
         <section>
             <ul class="am-list am-list-static am-list-border am-list-striped">
                 <li v-for="item in newsList">
-                    <a href="javascript:;" v-text="item.title"></a>
+                    <a href="javascript:;" @click="detailEvent()" v-text="item.title"></a>
+                    <section class="am-article am-hide">
+                        <section class="am-article-hd">
+                            <section class="am-article-title am-text-lg" v-text="item.title" style="line-height:1.5;"></section>
+                            <section class="am-article-meta am-margin-top-sm am-margin-bottom-sm" v-text="item.source"></section>
+                        </section>
+                        <section class="am-article-bd">
+                            <section class="am-article-lead am-margin-bottom-sm" v-text="item.desc"></section>
+                            <section class="am-g">
+                                <section class="am-u-sm-12" v-for="img in item.imageurls">
+                                    <img class="am-thumbnail" src="{{img.url}}" @error="imgErrorEvent()" />
+                                </section>
+                            </section>
+                            {{{item.html}}}
+                        </section>
+                    </section>
                     <span class="am-block am-text-right am-text-sm" v-text="item.pubDate"></span>
                 </li>
             </ul>
         </section>
     </article>
+    <span class="am-icon-chevron-circle-up am-text-xxl" style="position:fixed;bottom:20px;right:20px;" @click="returnTop()"></span>
     <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
     <script src="js/amazeui.min.js"></script>
@@ -80,17 +91,23 @@
             },
             methods: {
                 searchEvent: function() {
-                    $(event.target).blur();
+                    var obj = $(event.target);
+
+                    obj.blur();
+                    var categoryId = obj.attr('data-categoryId');
+
+                    $('.am-dropdown').click();
+                    $('body').scrollTop(0);
 
                     $.ajax({
                         type: 'GET',
                         url: 'http://apis.baidu.com/showapi_open_bus/channel_news/search_news',
                         data: $.param({
-                            channelId: v.categoryId,
+                            channelId: categoryId,
                             title: v.searchKey,
                             page: 1,
                             needContent: 0,
-                            needHtml: 0
+                            needHtml: 1
                         }),
                         headers: {
                             apikey: 'b9879e5e82c630b8de50e26b1759db30'
@@ -109,6 +126,20 @@
                             }
                         }
                     });
+                },
+                returnTop: function() {
+                    $('body').scrollTop(0);
+                },
+                detailEvent: function() {
+                    var obj = $(event.target);
+
+                    obj.addClass('am-hide');
+                    obj.next().removeClass('am-hide');
+                },
+                imgErrorEvent: function() {
+                    var obj = $(event.target);
+
+                    obj.remove();
                 }
             }
         });
