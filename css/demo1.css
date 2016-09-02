@@ -1,21 +1,25 @@
-*{
-	transition: all .5s;
+* {
+    transition: all .5s;
 }
-html,body{
-	overflow-x:hidden;
+
+html, body {
+    overflow-x: hidden;
 }
-img{
-	border-radius: 32px;;
+
+img {
+    border-radius: 32px;
 }
-.trans{
-	opacity: 0;
-	width: 0;
-	height: 0;
+
+.trans {
+    opacity: 0;
+    width: 0;
+    height: 0;
 }
-.div-close{
-	position: absolute;
-	top: 10px;
-	left: 90%;
-	color: #fff;
-	font-size: 18px;
+
+.div-close {
+    position: absolute;
+    top: 10px;
+    left: 90%;
+    color: #fff;
+    font-size: 18px;
 }

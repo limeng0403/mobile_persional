@@ -14,7 +14,6 @@
     <!-- Add to homescreen for Chrome on Android -->
     <meta name="mobile-web-app-capable" content="yes">
     <link rel="icon" sizes="192x192" href="img/news_api.png">
-
     <!-- Add to homescreen for Safari on iOS -->
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="blue">
@@ -65,23 +64,74 @@
             </ul>
         </section>
     </article>
+    <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
+        <div class="am-modal-dialog" style="border-radius: 15px;box-shadow: 0px 0px 2px 2px #aaa;">
+            <div class="am-modal-hd">
+                <span class="am-icon-spinner am-icon-spin"></span>
+            </div>
+            <div class="am-modal-bd">正在载入...</div>
+        </div>
+    </div>
     <span class="am-icon-chevron-circle-up am-text-xxl" style="position:fixed;bottom:20px;right:20px;" @click="returnTop()"></span>
     <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
     <script src="js/amazeui.min.js"></script>
     <script>
-        var v = new Vue({
-            el: 'body',
-            data: {
-                categoryList: [],
-                newsList: [],
-                categoryId: '0',
-                searchKey: ''
-            },
-            ready: function() {
+    var v = new Vue({
+        el: 'body',
+        data: {
+            categoryList: [],
+            newsList: [],
+            categoryId: '0',
+            searchKey: ''
+        },
+        ready: function() {
+            $('#my-modal-loading').modal('open');
+            $.ajax({
+                type: 'GET',
+                url: 'https://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
+                headers: {
+                    apikey: 'b9879e5e82c630b8de50e26b1759db30'
+                },
+                success: function(data) {
+                    try {
+                        var json = data;
+
+                        if (json.showapi_res_error != '') {
+                            return false;
+                        }
+
+                        v.categoryList = json.showapi_res_body.channelList;
+                    } catch (e) {
+
+                    }
+
+                    $('#my-modal-loading').modal('close');
+                }
+            });
+        },
+        methods: {
+            searchEvent: function() {
+                $('#my-modal-loading').modal('open');
+
+                var obj = $(event.target);
+
+                obj.blur();
+                var categoryId = obj.attr('data-categoryId');
+
+                $('.am-dropdown').click();
+                $('body').scrollTop(0);
+
                 $.ajax({
                     type: 'GET',
-                    url: 'https://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
+                    url: 'https://apis.baidu.com/showapi_open_bus/channel_news/search_news',
+                    data: $.param({
+                        channelId: categoryId,
+                        title: v.searchKey,
+                        page: 1,
+                        needContent: 0,
+                        needHtml: 1
+                    }),
                     headers: {
                         apikey: 'b9879e5e82c630b8de50e26b1759db30'
                     },
@@ -93,67 +143,31 @@
                                 return false;
                             }
 
-                            v.categoryList = json.showapi_res_body.channelList;
+                            v.newsList = json.showapi_res_body.pagebean.contentlist;
                         } catch (e) {
 
                         }
+
+                        $('#my-modal-loading').modal('close');
                     }
                 });
             },
-            methods: {
-                searchEvent: function() {
-                    var obj = $(event.target);
+            returnTop: function() {
+                $('body').scrollTop(0);
+            },
+            detailEvent: function() {
+                var obj = $(event.target);
 
-                    obj.blur();
-                    var categoryId = obj.attr('data-categoryId');
+                obj.addClass('am-hide');
+                obj.next().removeClass('am-hide');
+            },
+            imgErrorEvent: function() {
+                var obj = $(event.target);
 
-                    $('.am-dropdown').click();
-                    $('body').scrollTop(0);
-
-                    $.ajax({
-                        type: 'GET',
-                        url: 'https://apis.baidu.com/showapi_open_bus/channel_news/search_news',
-                        data: $.param({
-                            channelId: categoryId,
-                            title: v.searchKey,
-                            page: 1,
-                            needContent: 0,
-                            needHtml: 1
-                        }),
-                        headers: {
-                            apikey: 'b9879e5e82c630b8de50e26b1759db30'
-                        },
-                        success: function(data) {
-                            try {
-                                var json = data;
-
-                                if (json.showapi_res_error != '') {
-                                    return false;
-                                }
-
-                                v.newsList = json.showapi_res_body.pagebean.contentlist;
-                            } catch (e) {
-
-                            }
-                        }
-                    });
-                },
-                returnTop: function() {
-                    $('body').scrollTop(0);
-                },
-                detailEvent: function() {
-                    var obj = $(event.target);
-
-                    obj.addClass('am-hide');
-                    obj.next().removeClass('am-hide');
-                },
-                imgErrorEvent: function() {
-                    var obj = $(event.target);
-
-                    obj.remove();
-                }
+                obj.remove();
             }
-        });
+        }
+    });
     </script>
 </body>
 
