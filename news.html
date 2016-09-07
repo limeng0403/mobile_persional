@@ -1,3 +1,4 @@
+<!doctype html>
 <html>
 
 <head>
@@ -21,25 +22,18 @@
     <meta name="format-detection" content="telephone=no" />
     <link rel="apple-touch-icon-precomposed" href="img/news_api.png">
     <link href="css/amazeui.min.css" rel="stylesheet" />
+    <link href="css/news.css" rel="stylesheet" />
     <title>新闻API</title>
 </head>
 
 <body>
-    <header>
-        <ul class="am-nav am-nav-pills">
-            <li class="am-dropdown" data-am-dropdown>
-                <a class="am-dropdown-toggle" data-am-dropdown-toggle href="javascript:;">
-                    新闻分类<span class="am-icon-caret-down"></span>
-                </a>
-                <ul class="am-dropdown-content">
-                    <li v-for="item in categoryList">
-                        <a href="javascript:;" data-categoryId="{{item.channelId}}" @click="searchEvent()" v-text="item.name"></a>
-                    </li>
-                </ul>
-            </li>
-        </ul>
+    <header class="am-g dm-nav dm-nav-hidden">
+        <section class="am-u-sm-4 am-text-center" v-for="item in categoryList">
+            <a href="javascript:;" data-categoryId="{{item.channelId}}" @click="searchEvent()" v-text="item.name"></a>
+        </section>
+        <span class="am-icon-ellipsis-v menu-icon" @click="toggleMenu()"></span>
     </header>
-    <article>
+    <article class="news-body">
         <section>
             <ul class="am-list am-list-static am-list-border am-list-striped">
                 <li v-for="item in newsList">
@@ -52,18 +46,20 @@
                         <section class="am-article-bd">
                             <section class="am-article-lead am-margin-bottom-sm" v-text="item.desc"></section>
                             <section class="am-g">
-                                <section class="am-u-sm-12" v-for="img in item.imageurls">
-                                    <img class="am-thumbnail" src="{{img.url}}" @error="imgErrorEvent()" />
-                                </section>
-                            </section>
-                            {{{item.html}}}
-                        </section>
+                                <section class="am-u-sm-12" v-for="img in item.imageurls"> <img class="am-thumbnail" src="{{img.url}}" @error="imgErrorEvent()" /> </section>
+                            </section> {{{item.html}}} </section>
                     </section>
                     <span class="am-block am-text-right am-text-sm" v-text="item.pubDate"></span>
                 </li>
             </ul>
         </section>
     </article>
+    <footer class="am-g">
+        <section class="am-u-sm-12 am-text-center am-text-sm">
+            <p>技术支持：妹子UI，易源接口，百度APIStore</p>
+            <p>2016</p>
+        </section>
+    </footer>
     <div class="am-modal am-modal-loading am-modal-no-btn" tabindex="-1" id="my-modal-loading">
         <div class="am-modal-dialog" style="border-radius: 15px;box-shadow: 0px 0px 2px 2px #aaa;">
             <div class="am-modal-hd">
@@ -76,99 +72,7 @@
     <script src="https://cdn.bootcss.com/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdn.bootcss.com/vue/1.0.26/vue.min.js"></script>
     <script src="js/amazeui.min.js"></script>
-    <script>
-    var v = new Vue({
-        el: 'body',
-        data: {
-            categoryList: [],
-            newsList: [],
-            categoryId: '0',
-            searchKey: ''
-        },
-        ready: function() {
-            $('#my-modal-loading').modal('open');
-            $.ajax({
-                type: 'GET',
-                url: 'https://apis.baidu.com/showapi_open_bus/channel_news/channel_news',
-                headers: {
-                    apikey: 'b9879e5e82c630b8de50e26b1759db30'
-                },
-                success: function(data) {
-                    try {
-                        var json = data;
-
-                        if (json.showapi_res_error != '') {
-                            return false;
-                        }
-
-                        v.categoryList = json.showapi_res_body.channelList;
-                    } catch (e) {
-
-                    }
-
-                    $('#my-modal-loading').modal('close');
-                }
-            });
-        },
-        methods: {
-            searchEvent: function() {
-                $('#my-modal-loading').modal('open');
-
-                var obj = $(event.target);
-
-                obj.blur();
-                var categoryId = obj.attr('data-categoryId');
-
-                $('.am-dropdown').click();
-                $('body').scrollTop(0);
-
-                $.ajax({
-                    type: 'GET',
-                    url: 'https://apis.baidu.com/showapi_open_bus/channel_news/search_news',
-                    data: $.param({
-                        channelId: categoryId,
-                        title: v.searchKey,
-                        page: 1,
-                        needContent: 0,
-                        needHtml: 1
-                    }),
-                    headers: {
-                        apikey: 'b9879e5e82c630b8de50e26b1759db30'
-                    },
-                    success: function(data) {
-                        try {
-                            var json = data;
-
-                            if (json.showapi_res_error != '') {
-                                return false;
-                            }
-
-                            v.newsList = json.showapi_res_body.pagebean.contentlist;
-                        } catch (e) {
-
-                        }
-
-                        $('#my-modal-loading').modal('close');
-                    }
-                });
-            },
-            returnTop: function() {
-                $('body').scrollTop(0);
-            },
-            detailEvent: function() {
-                var obj = $(event.target);
-
-                obj.addClass('am-hide');
-                obj.next().removeClass('am-hide');
-            },
-            imgErrorEvent: function() {
-                var obj = $(event.target);
-
-                obj.remove();
-            }
-        }
-    });
-    </script>
+    <script src="js/news.js"></script>
 </body>
 
 </html>

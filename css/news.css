@@ -1,0 +1,7 @@
+html, body { height: 100%; }
+.dm-nav { position: fixed; line-height: 2; width: 100%; top: 0; left: 0; background: #fff; opacity: 0.9; z-index: 10; }
+.dm-nav-hidden { height: 32px; overflow: hidden; }
+.menu-icon { color: #333; position: absolute; right: 15px; top: 2px; z-index: 20; }
+.news-body { margin-top: 32px; min-height: 80%; }
+.news-tag-curr { background: #0e90d2; }
+.news-tag-curr a { color: #fff; }
